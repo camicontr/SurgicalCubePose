@@ -7,8 +7,9 @@
 
 * Python 3
 * NumPy
+* Pandas
 * Scipy
 * OpenCV
-* sklearn
+* Sklearn
 * circle_fit
-* sksurgeryspherefitting
+* Scikit-surgery-sphere-fitting
