@@ -1,5 +1,5 @@
 # SurgicalCubePose
-
+This is the main repository for tracking surgical attachment for accurate monocular pose estimation with aruco boards for the purpose of providing navigation support.
 
 
 
