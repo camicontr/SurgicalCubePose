@@ -13,7 +13,7 @@ To run this example:
 
 * Clone this repository: `git clone https://github.com/camicontr/SurgicalCubePose.git`
 * You need to download the `sphere/` which contains the data of the position of the instrument tip in the (x, y, z) axes in mm for three sphere fit experiments in addition to the intrinsic parameters of the camera and the relative vector of the calibration of the tip  [here](https://drive.google.com/drive/folders/1E_RvevjmIQaYquqwyUEOO_2DNnOohgSj?usp=sharing).
-* Run `Recontruction.py` for read the data and fit the sphere, can chance the example between 0, 1 or 2.
+* Run `visualization.py` for read the data and fit the sphere, can chance the example between 0, 1 or 2.
 
 A visualization of the point cloud in addition to the sphere model obtained 
 
