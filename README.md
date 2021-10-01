@@ -6,7 +6,7 @@ This is the main repository for tracking surgical attachment for accurate monocu
 With this example, from tracing the tip of the surgical instrument on top of a porcelain sphere with a radius of 45 mm, the following sphere fit is obtained, shown in the following gif.
 
 <p align="center">
-    <img src="figures/tracing.gif" alt="tracing the sphere" width="400px"/>
+    <img src="figures/tracing.gif" alt="tracing the sphere" width="300px"/>
 </p>
 
 To run this example:
@@ -18,7 +18,7 @@ To run this example:
 A visualization of the point cloud in addition to the sphere model obtained 
 
 <p align="center">
-    <img src="figures/Sphere.png" alt="Result of fit sphere" width="400px"/>
+    <img src="figures/Sphere.png" alt="Result of fit sphere" width="500px"/>
 </p>
 With a radius rms error of 0.1701 mm 
 
