@@ -58,7 +58,7 @@ def processing_tip(root: str, save):
 
 
 # get the pose data to calibrate the cube
-# images_cal = '/Users/pc/PycharmProjects/pythonProject/Trabajo de grado/tip_new/'
+# images_cal = 'folder path with calibration images'
 # processing_tip(images_cal, 1)
 
 # reading data for calibration
