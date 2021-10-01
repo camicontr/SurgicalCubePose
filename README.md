@@ -12,12 +12,13 @@ With this example, from tracing the tip of the surgical instrument on top of a p
 To run this example:
 
 * Clone this repository: `git clone https://github.com/camicontr/SurgicalCubePose.git`
+* You need to download the `sphere/` which contains the data of the position of the instrument tip in the (x, y, z) axes in mm for three sphere fit experiments  [here](https://drive.google.com/drive/folders/1E_RvevjmIQaYquqwyUEOO_2DNnOohgSj?usp=sharing).
 
 
 A visualization of the point cloud in addition to the sphere model obtained 
 
 <p align="center">
-    <img src="figures/Sphere" alt="Result of fit sphere" width="400px"/>
+    <img src="figures/Sphere.png" alt="Result of fit sphere" width="400px"/>
 </p>
 With a radius rms error of 0.1701 mm 
 
