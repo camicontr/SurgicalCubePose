@@ -43,7 +43,7 @@ def main(root: str):
     return pd.DataFrame(data={"x axis tip": x_tip, "y axis tip": y_tip, "z axis tip": z_tip})
 
 
-# video = "/Users/pc/PycharmProjects/pythonProject/Trabajo de grado/sphere1.mov"
+# video = "/folder path/sphere1.mov" # video path 
 # df = main(video)
-# df.to_excel(excel_writer="animation_blender.xlsx")
+# df.to_excel(excel_writer="save.xlsx")
 
