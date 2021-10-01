@@ -8,7 +8,7 @@ import circle_fit
 
 def plane_analysis(n_example):
     # read data
-    df = pd.read_excel("/Users/pc/PycharmProjects/pythonProject/Trabajo de grado/circle/circle{n}.xlsx".
+    df = pd.read_excel("/folder path/circle/circle{n}.xlsx".
                        format(n=n_example))
     xyz = df.iloc[:, 1:4]
     xyz = np.asarray(xyz)
@@ -54,7 +54,7 @@ def plane_analysis(n_example):
 
 def sphere_analysis(n_example):
     # read data
-    df = pd.read_excel("/Users/pc/PycharmProjects/pythonProject/Trabajo de grado/sphere/sphere{n}.xlsx".
+    df = pd.read_excel("/folder path/sphere/sphere{n}.xlsx".
                        format(n=n_example))
     xyz = df.iloc[:, 1:4]
     xyz = np.asarray(xyz)
@@ -95,7 +95,7 @@ def sphere_analysis(n_example):
     print("El error rms es de {:.4f} mm".format(rms(r_calc - parameters[3])))
 
 
-# example = 2
+example = 2
 # plane_analysis(example)
 # print("")
-# sphere_analysis(example)
+sphere_analysis(example)
