@@ -9,6 +9,7 @@ This is the main repository for tracking surgical attachment for accurate monocu
 * Scipy
 * OpenCV
 * Sklearn
+* Pickle
 * circle_fit
 * Scikit-surgery-sphere-fitting
 
@@ -23,7 +24,7 @@ To run this example:
 
 * Clone this repository: `git clone https://github.com/camicontr/SurgicalCubePose.git`
 * You need to download the `sphere/` which contains the data of the position of the instrument tip in the (x, y, z) axes in mm for three sphere fit experiments in addition to the intrinsic parameters of the camera [here](https://drive.google.com/drive/folders/1uhU6IE9X8NizRNrs7ECeyxzukqAC4v5q?usp=sharing).
-* Run `Recontruction.py` for read the data and fit the sphere, can chance the example between 0, 1 or 2.
+* Run `visualization.py` for read the data and fit the sphere, can chance the example between 0, 1 or 2.
 
 A visualization of the point cloud in addition to the sphere model obtained 
 
