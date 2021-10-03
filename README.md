@@ -28,6 +28,6 @@ To run this example:
 A visualization of the point cloud in addition to the sphere model obtained 
 
 <p align="center">
-    <img src="figures/Sphere.png" alt="Result of fit sphere" width="500px"/>
+    <img src="figures/Sphere.jpeg" alt="Result of fit sphere" width="500px"/>
 </p>
 With a radius rms error of 0.1701 mm 
