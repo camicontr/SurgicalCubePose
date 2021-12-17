@@ -51,6 +51,7 @@ def method_lsq():
     # Calculate error
     residual_vectors = np.array((ref_p_cube + ref_r_cube @ opt[0]).reshape(len(p_cube), 3))  # error
     residual_norms = np.linalg.norm(residual_vectors, axis=1)
+    print(residual_norms)
 
     mean_error = np.mean(residual_norms)
     residual_rms = rms(residual_norms)
@@ -135,5 +136,5 @@ def preprocessing(root: str, m: int):
         cv2.destroyAllWindows()
 
 
-images_cal = './Images_cal/'
-preprocessing(images_cal, 1)
+images_cal = './Images_cal_2/'
+preprocessing(images_cal, 0)

@@ -53,8 +53,8 @@ class Aruco:
         self.parameters.adaptiveThreshConstant = 7  # default 7
         self.parameters.minMarkerPerimeterRate = 0.05  # default  0.005
         # self.parameters.cornerRefinementMethod = cv2.aruco.CORNER_REFINE_SUBPIX
-        # self.parameters.cornerRefinementWinSize = 3
-        # self.parameters.cornerRefinementMinAccuracy = 0.01
+        # self.parameters.cornerRefinementWinSize = 1
+        # self.parameters.cornerRefinementMinAccuracy = 0.001
         self.parameters.cornerRefinementMethod = cv2.aruco.CORNER_REFINE_CONTOUR
         self.color = (255, 0, 0)
 
