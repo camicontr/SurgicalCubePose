@@ -4,27 +4,26 @@ import pandas as pd
 import pickle
 import scipy
 import os
-cal = pickle.load(open("intrinsic.pickle", "rb"))  # parameters intrinsic of camera
+cal = pickle.load(open("basler.pickle", "rb"))  # parameters intrinsic of camera
 
 
-def Koeda(p_table, p_cube, rot_cube):
+def method_koeda(p_table, p_cube, rot_cube):
     # calibration tip with koeda method.
     r_ = Rot.from_rotvec([rot_cube[0][0], rot_cube[1][0], rot_cube[2][0]])
-    R_cube = r_.as_matrix()  # convert to rotation matrix from Rodriguez vector .
+    r_cube = r_.as_matrix()  # convert to rotation matrix from Rodriguez vector .
     p_c_rel = np.subtract(p_table, p_cube)
-    p_rel = np.matmul(np.linalg.inv(R_cube), p_c_rel)
-    p_c_tip = np.dot(R_cube, p_rel) + p_cube  # position of tip
-
+    p_rel = np.matmul(np.linalg.inv(r_cube), p_c_rel)
+    p_c_tip = np.dot(r_cube, p_rel) + p_cube  # position of tip
     return p_rel, p_c_tip
 
 
-def lsq():
+def method_lsq():
     # reading data for calibration
     data = pickle.load(open("data_tip.pickle", "rb"))
-    Qw = data[:, 0]
-    Qx = data[:, 1]
-    Qy = data[:, 2]
-    Qz = data[:, 3]
+    qw = data[:, 0]
+    qx = data[:, 1]
+    qy = data[:, 2]
+    qz = data[:, 3]
     p_cube = data[:, 4:7]
 
     # plot the data
@@ -37,21 +36,20 @@ def lsq():
     plt.title("Aruco cube Positions")
     plt.show()
 
-    refP_cube = np.array(p_cube.reshape(-1, 1))
-    refR_cube = []
+    ref_p_cube = np.array(p_cube.reshape(-1, 1))
+    ref_r_cube = []
 
     for i in range(len(p_cube)):
-        r = Rot.from_quat([Qw[i], Qx[i], Qy[i], Qz[i]])  # conversion
+        r = Rot.from_quat([qw[i], qx[i], qy[i], qz[i]])  # conversion
         # matrix rotation from quaternions
-        refR_cube.extend(np.concatenate((r.as_matrix(), -np.identity(3)), axis=1))
-
-    opt = scipy.linalg.lstsq(refR_cube, np.negative(refP_cube))
+        ref_r_cube.extend(np.concatenate((r.as_matrix(), -np.identity(3)), axis=1))
+    opt = scipy.linalg.lstsq(ref_r_cube, np.negative(ref_p_cube))
 
     p_rel = opt[0][0:3]
-    # p_tip = optiT[0][3:6]
+    # p_tip = opt[0][3:6]
 
     # Calculate error
-    residual_vectors = np.array((refP_cube + refR_cube @ opt[0]).reshape(len(p_cube), 3))  # error
+    residual_vectors = np.array((ref_p_cube + ref_r_cube @ opt[0]).reshape(len(p_cube), 3))  # error
     residual_norms = np.linalg.norm(residual_vectors, axis=1)
 
     mean_error = np.mean(residual_norms)
@@ -66,10 +64,10 @@ def preprocessing(root: str, m: int):
     # if type is 1 koeda method
     # root: folder with image (.bmp) with table marker and cube marker
 
-    Qo = []
-    QX = []
-    QY = []
-    QZ = []
+    qo = []
+    qx_ = []
+    qy_ = []
+    qz_ = []
     tx = []
     ty = []
     tz = []
@@ -78,7 +76,7 @@ def preprocessing(root: str, m: int):
     detector_aruco = Aruco()
     board = Pose(cal["mtx"], cal["dist"], 3, 19, [0, 4, 8, 16])  # in mm
 
-    images = np.array([root + f for f in os.listdir(root) if f.endswith(".bmp")])
+    images = np.array([root + f for f in os.listdir(root) if f.endswith(".PNG")])
     order = np.argsort([int(p.split(".")[-2].split("_")[-1]) for p in images])
     images = images[order]
 
@@ -96,10 +94,10 @@ def preprocessing(root: str, m: int):
                 tx.append(t_cube[0][0])
                 ty.append(t_cube[1][0])
                 tz.append(t_cube[2][0])
-                Qo.append(qua[0])
-                QX.append(qua[1])
-                QY.append(qua[2])
-                QZ.append(qua[3])
+                qo.append(qua[0])
+                qx_.append(qua[1])
+                qy_.append(qua[2])
+                qz_.append(qua[3])
 
                 if r_ > 3:
                     board.draw_axis(frame, r_cube, t_cube, 10)
@@ -107,13 +105,13 @@ def preprocessing(root: str, m: int):
                 cv2.imshow("output", frame)
                 cv2.waitKey(0)
 
-        df = pd.DataFrame(data={"Qo": Qo, "QX": QX, "QY": QY, "QZ": QZ, "Tx": tx, "Ty": ty, "Tz": tz})
+        df = pd.DataFrame(data={"Qo": qo, "QX": qx_, "QY": qy_, "QZ": qz_, "Tx": tx, "Ty": ty, "Tz": tz})
         data = np.asarray(df)
         pickle.dump(data, open("data_tip.pickle", "wb"))
-        lsq()
+        method_lsq()
 
     if m == 1:
-        frame = cv2.imread(images[1])  # only a image
+        frame = cv2.imread(images[1])
         corners, ids = detector_aruco.detection(frame)
         detector_aruco.draw_detections(frame, corners, ids)  # draw marker detections
 
@@ -127,7 +125,7 @@ def preprocessing(root: str, m: int):
                 board.draw_axis(frame, r_cube, t_cube, 10)
 
             if ret > 2 and ret1 > 2:
-                relative, p_tip = Koeda(t_table, t_cube, r_cube)
+                relative, p_tip = method_koeda(t_table, t_cube, r_cube)
                 print("relative vector p_rel: ", relative)
 
             #  Display the resulting frame
@@ -137,5 +135,5 @@ def preprocessing(root: str, m: int):
         cv2.destroyAllWindows()
 
 
-images_cal = '/Users/pc/PycharmProjects/tg/cal/'
+images_cal = './Images_cal/'
 preprocessing(images_cal, 1)

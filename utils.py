@@ -59,8 +59,8 @@ class Aruco:
         self.color = (255, 0, 0)
 
     def detection(self, frame):
-        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)  # convert to gray
-        corners, ids, _ = cv2.aruco.detectMarkers(gray, self.aruco_dict, parameters=self.parameters)
+        # gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)  # convert to gray
+        corners, ids, _ = cv2.aruco.detectMarkers(frame, self.aruco_dict, parameters=self.parameters)
         return corners, ids
 
     def draw_detections(self, frame, corners, ids):
