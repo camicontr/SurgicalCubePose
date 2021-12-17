@@ -1,0 +1,5 @@
+*.PNG
+*.pickle
+*.DS_Store
+Calibration/
+.idea/
