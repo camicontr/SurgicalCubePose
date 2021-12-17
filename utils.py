@@ -70,9 +70,9 @@ class Aruco:
 def tip(r_vec, t_vec):
     # input: rotation Rodriguez and translation vector from cube
     # output: position of tip
-    p_k_rel = np.array([21.18094139,
-                        -98.18741384,
-                        -22.81756012])
+    p_k_rel = np.array([20.40362974,
+                        -98.25048598,
+                        -30.57315047])
     p_k_rel = p_k_rel.reshape((3, 1))
 
     p_c_knife = np.array([t_vec[0][0],

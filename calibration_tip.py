@@ -19,7 +19,7 @@ def method_koeda(p_table, p_cube, rot_cube):
 
 def method_lsq():
     # reading data for calibration
-    data = pickle.load(open("refine_tip_data.pickle", "rb"))
+    data = pickle.load(open("refine_tip_2_data.pickle", "rb"))
     qw = data[:, 0]
     qx = data[:, 1]
     qy = data[:, 2]
@@ -104,7 +104,7 @@ def preprocessing(root, m):
 
         df = pd.DataFrame(data={"Qo": qo, "QX": qx_, "QY": qy_, "QZ": qz_, "Tx": tx, "Ty": ty, "Tz": tz})
         data = np.asarray(df)
-        pickle.dump(data, open("data_for_tip.pickle", "wb"))
+        pickle.dump(data, open("refine_tip_2_data.pickle", "wb"))
         method_lsq()
 
     if m == 1:
@@ -131,6 +131,5 @@ def preprocessing(root, m):
         cv2.destroyAllWindows()
 
 
-# images_cal = './refine_tip_2/'
-# preprocessing(images_cal, 0)
-method_lsq()
+images_cal = './refine_tip_2/'
+preprocessing(images_cal, 0)
