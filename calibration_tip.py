@@ -1,5 +1,5 @@
-import matplotlib.pyplot as plt
 from utils import *
+import matplotlib.pyplot as plt
 import pandas as pd
 import pickle
 import scipy
@@ -19,7 +19,7 @@ def method_koeda(p_table, p_cube, rot_cube):
 
 def method_lsq():
     # reading data for calibration
-    data = pickle.load(open("data_tip.pickle", "rb"))
+    data = pickle.load(open("refine_tip_data.pickle", "rb"))
     qw = data[:, 0]
     qx = data[:, 1]
     qy = data[:, 2]
@@ -46,7 +46,6 @@ def method_lsq():
     opt = scipy.linalg.lstsq(ref_r_cube, np.negative(ref_p_cube))
 
     p_rel = opt[0][0:3]
-    # p_tip = opt[0][3:6]
 
     # Calculate error
     residual_vectors = np.array((ref_p_cube + ref_r_cube @ opt[0]).reshape(len(p_cube), 3))  # error
@@ -59,11 +58,9 @@ def method_lsq():
     print("relative vector ts: ", p_rel)
 
 
-def preprocessing(root: str, m: int):
-    # if type is 0 lsq method
-    # root: folder with images (.bmp) of the poses of cube
-    # if type is 1 koeda method
-    # root: folder with image (.bmp) with table marker and cube marker
+def preprocessing(root, m):
+    # m = 0 ---> lsq method, m = 1 ---> koeda method
+    # root: folder with images
 
     qo = []
     qx_ = []
@@ -100,15 +97,14 @@ def preprocessing(root: str, m: int):
                 qy_.append(qua[2])
                 qz_.append(qua[3])
 
-                if r_ > 3:
-                    board.draw_axis(frame, r_cube, t_cube, 10)
+                board.draw_axis(frame, r_cube, t_cube, 10)
 
                 cv2.imshow("output", frame)
                 cv2.waitKey(0)
 
         df = pd.DataFrame(data={"Qo": qo, "QX": qx_, "QY": qy_, "QZ": qz_, "Tx": tx, "Ty": ty, "Tz": tz})
         data = np.asarray(df)
-        pickle.dump(data, open("data_tip.pickle", "wb"))
+        pickle.dump(data, open("data_for_tip.pickle", "wb"))
         method_lsq()
 
     if m == 1:
@@ -125,16 +121,16 @@ def preprocessing(root: str, m: int):
             if ret1:
                 board.draw_axis(frame, r_cube, t_cube, 10)
 
-            if ret > 2 and ret1 > 2:
+            if ret > 3 and ret1 > 3:
                 relative, p_tip = method_koeda(t_table, t_cube, r_cube)
-                print("relative vector p_rel: ", relative)
+                pickle.dump(relative, open("relative_vector.pickle", "wb"))  # save the relative vector for koeda method
 
             #  Display the resulting frame
             cv2.imshow('frame', frame)
             cv2.waitKey(0)
-
         cv2.destroyAllWindows()
 
 
-images_cal = './Images_cal_2/'
-preprocessing(images_cal, 0)
+# images_cal = './refine_tip_2/'
+# preprocessing(images_cal, 0)
+method_lsq()
