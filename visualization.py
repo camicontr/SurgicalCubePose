@@ -1,4 +1,4 @@
-from sksurgeryspherefitting.algorithms import sphere_fitting
+# from sksurgeryspherefitting.algorithms import sphere_fitting
 from sklearn.decomposition import PCA
 import matplotlib.pyplot as plt
 from utils import *
@@ -8,8 +8,7 @@ import circle_fit
 
 def plane_analysis(n_example):
     # read data
-    df = pd.read_excel("/Users/pc/PycharmProjects/tg/circle/circle{n}.xlsx".
-                       format(n=n_example))
+    df = pd.read_csv("./circle{n}.csv".format(n=n_example))
     xyz = df.iloc[:, 1:4]
     xyz = np.asarray(xyz)
 
@@ -51,7 +50,7 @@ def plane_analysis(n_example):
     plt.axis('equal')
     plt.show()
 
-
+"""
 def sphere_analysis(n_example):
     # read data
     df = pd.read_excel("/Users/pc/PycharmProjects/tg/sphere/sphere{n}.xlsx".
@@ -93,9 +92,7 @@ def sphere_analysis(n_example):
     r_calc = radius_sphere(xyz, parameters)
     r_calc = np.asarray(r_calc)
     print("El error rms es de {:.4f} mm".format(rms(r_calc - parameters[3])))
+"""
 
-
-example = 2
+example = 1
 plane_analysis(example)
-# print("")
-# sphere_analysis(example)

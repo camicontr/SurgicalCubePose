@@ -72,7 +72,7 @@ def tip(r_vec, t_vec):
     # output: position of tip
     p_k_rel = np.array([20.40362974,
                         -98.25048598,
-                        -30.57315047])
+                        -5.0])
     p_k_rel = p_k_rel.reshape((3, 1))
 
     p_c_knife = np.array([t_vec[0][0],

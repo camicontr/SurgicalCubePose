@@ -1,4 +1,5 @@
 *.PNG
+*.csv
 *.pickle
 *.DS_Store
 Calibration/
