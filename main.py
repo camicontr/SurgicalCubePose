@@ -32,13 +32,13 @@ def main(root):
             y_tip.append(p_tip[1][0])
             z_tip.append(p_tip[2][0])
 
-        cv2.imshow("output", frame)
-        cv2.waitKey(0)
+        # cv2.imshow("output", frame)
+        # cv2.waitKey(0)
 
     cv2.destroyAllWindows()
     return pd.DataFrame(data={"x axis tip": x_tip, "y axis tip": y_tip, "z axis tip": z_tip})
 
 
-folder = './circle1/'
-df = main(folder)
-df.to_csv("circle1.csv")
+# folder = './circle3/'
+# df = main(folder)
+# df.to_csv("circle3.csv")
