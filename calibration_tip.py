@@ -19,7 +19,7 @@ def method_koeda(p_table, p_cube, rot_cube):
 
 def method_lsq():
     # reading data for calibration
-    data = pickle.load(open("data_for_calibration_tip_1.pickle", "rb"))
+    data = pickle.load(open("data_for_calibration_tip_2.pickle", "rb"))
     qw = data[:, 0]
     qx = data[:, 1]
     qy = data[:, 2]
