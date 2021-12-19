@@ -6,9 +6,9 @@ cal = pickle.load(open("basler.pickle", "rb"))
 
 
 def main(root):
-    x_tip = []
-    y_tip = []
-    z_tip = []
+    x_cube = []
+    y_cube = []
+    z_cube = []
 
     detector = Aruco()
     board = Pose(cal["mtx"], cal["dist"], 3, 19, [0, 4, 8, 16])  # in mm
@@ -24,21 +24,19 @@ def main(root):
 
         r_, r_cube, t_cube = board.pose_board(corners, ids, 2)
 
-        if r_ > 3:
-            p_tip = tip(r_cube, t_cube)
-            board.draw_axis(frame, r_cube, p_tip, 5)
-            board.draw_axis(frame, r_cube, t_cube, 15)
-            x_tip.append(p_tip[0][0])
-            y_tip.append(p_tip[1][0])
-            z_tip.append(p_tip[2][0])
+        if r_ >= 3:
+            board.draw_axis(frame, r_cube, t_cube, 10)
+            x_cube.append(t_cube[0][0])
+            y_cube.append(t_cube[1][0])
+            z_cube.append(t_cube[2][0])
 
-        # cv2.imshow("output", frame)
-        # cv2.waitKey(0)
+        cv2.imshow("output", frame)
+        cv2.waitKey(0)
 
     cv2.destroyAllWindows()
-    return pd.DataFrame(data={"x axis tip": x_tip, "y axis tip": y_tip, "z axis tip": z_tip})
+    return pd.DataFrame(data={"x axis tip": x_cube, "y axis tip": y_cube, "z axis tip": z_cube})
 
 
-# folder = './circle3/'
-# df = main(folder)
-# df.to_csv("circle3.csv")
+folder = './transl/'
+df = main(folder)
+df.to_csv("transl.csv")

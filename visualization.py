@@ -6,6 +6,25 @@ import pandas as pd
 import circle_fit
 
 
+def transl_analysis():
+    df = pd.read_csv("./transl.csv")
+    xyz = df.iloc[:, 1:4]
+    xyz = np.asarray(xyz)
+
+    # plot line
+    fig = plt.figure(figsize=(6, 12))
+    ax = fig.add_subplot(211, projection='3d')
+    ax.scatter3D(xyz.T[0], xyz.T[1], xyz.T[2], color="blue", label="points")
+    ax.set_xlabel('X (mm)')
+    ax.set_ylabel('Y (mm)')
+    ax.set_zlabel('Z (mm)')
+    ax.legend()
+    ax = fig.add_subplot(212)
+    plt.scatter(xyz[:, 0], xyz[:, 1], color="blue")
+    plt.axis('equal')
+    plt.show()
+
+
 def plane_analysis(n_example):
     # read data
     df = pd.read_csv("./circle{n}.csv".format(n=n_example))
@@ -92,5 +111,4 @@ def sphere_analysis(n_example):
     print("El error rms es de {:.4f} mm".format(rms(r_calc - parameters[3])))
 """
 
-example = 1
-plane_analysis(example)
+transl_analysis()
