@@ -37,11 +37,13 @@ def plane_analysis(n_example):
     # dimension reduction
     pca = PCA(n_components=2, svd_solver="full")
     xyz_pca = pca.fit_transform(xyz)
+    print(xyz_pca)
 
     # circle fit
     data_c = circle_fit.least_squares_circle(xyz_pca)
     r = data_c[2]  # radius from circle fit
     r_ = np.sqrt((xyz_pca[:, 0])**2 + (xyz_pca[:, 1])**2)
+    print(r-r_)
     print("rms error fit circle:", rms(r-r_))
 
     ax = fig.add_subplot(212)

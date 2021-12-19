@@ -19,7 +19,7 @@ def method_koeda(p_table, p_cube, rot_cube):
 
 def method_lsq():
     # reading data for calibration
-    data = pickle.load(open("complete.pickle", "rb"))
+    data = pickle.load(open("data_for_calibration_tip_1.pickle", "rb"))
     qw = data[:, 0]
     qx = data[:, 1]
     qy = data[:, 2]
@@ -50,25 +50,16 @@ def method_lsq():
     # Calculate error
     residual_vectors = np.array((ref_p_cube + ref_r_cube @ opt[0]).reshape(len(p_cube), 3))  # error
     residual_norms = np.linalg.norm(residual_vectors, axis=1)
-    print(residual_norms)
 
     mean_error = np.mean(residual_norms)
     residual_rms = rms(residual_norms)
-    print("mean error: ", mean_error, "mm", "RMS error: ", residual_rms, "mm")
+    print("mean error: ", mean_error, "mm", "rms error: ", residual_rms, "mm", "data points: ", len(residual_norms))
     print("relative vector ts: ", p_rel)
 
 
 def preprocessing(root, m):
     # m = 0 ---> lsq method, m = 1 ---> koeda method
-    # root: folder with images
-
-    qo = []
-    qx_ = []
-    qy_ = []
-    qz_ = []
-    tx = []
-    ty = []
-    tz = []
+    # root: folder
 
     # initialization of the classes
     detector_aruco = Aruco()
@@ -79,6 +70,8 @@ def preprocessing(root, m):
     images = images[order]
 
     if m == 0:
+        qo, qx_, qy_, qz_, tx, ty, tz = [], [], [], [], [], [], []
+
         for im in images:
             frame = cv2.imread(im)
             corners, ids = detector_aruco.detection(frame)  # getting the corners and ids
@@ -104,8 +97,7 @@ def preprocessing(root, m):
 
         df = pd.DataFrame(data={"Qo": qo, "QX": qx_, "QY": qy_, "QZ": qz_, "Tx": tx, "Ty": ty, "Tz": tz})
         data = np.asarray(df)
-        pickle.dump(data, open("complete.pickle", "wb"))
-        method_lsq()
+        pickle.dump(data, open("data_for_calibration_tip.pickle", "wb"))  # save the data for calibration
 
     if m == 1:
         frame = cv2.imread(images[1])
@@ -131,5 +123,4 @@ def preprocessing(root, m):
         cv2.destroyAllWindows()
 
 
-images_cal = './Calibracion2/'
-preprocessing(images_cal, 0)
+method_lsq()
