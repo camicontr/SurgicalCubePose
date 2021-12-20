@@ -6,40 +6,47 @@ import pandas as pd
 import circle_fit
 
 
-# the intersection of those two planes and
-# the function for the line would be:
-# z = m_yz * y + c_yz
-# z = m_xz * x + c_xz
-# or:
-def lin(z, c_xz_, c_yz_, m_xz_, m_yz_):
-    x = (z - c_xz_)/m_xz_
-    y = (z - c_yz_)/m_yz_
-    return x, y
+def dist_seg(A, B, P):
+    if all(A==P) or all(B==P):
+        return 0
+
+    elif np.arccos(np.dot((P-A)/np.linalg.norm(P-A), (B-A)/np.linalg.norm(B-A))) > np.pi/2:
+        return np.linalg.norm(P-A)
+
+    elif np.arccos(np.dot((P-B)/np.linalg.norm(P-B), (A-B)/np.linalg.norm(A-B))) > np.pi/2:
+        return np.linalg.norm(P-B)
+
+    return np.linalg.norm(np.cross(B-A, A-P))/np.linalg.norm(B-A)
 
 
 def transl_analysis():
     df = pd.read_csv("./transl.csv")
     xyz = df.iloc[:, 1:4]
     xyz = np.asarray(xyz)
-    # this will find the slope and x-intercept of a plane
-    # parallel to the y-axis that best fits the data
-    A_xz = np.vstack((xyz.T[0], np.ones(len(xyz.T[0])))).T
-    m_xz, c_xz = np.linalg.lstsq(A_xz, xyz.T[2], rcond=-1)[0]
 
-    # again for a plane parallel to the x-axis
-    A_yz = np.vstack((xyz.T[1], np.ones(len(xyz.T[1])))).T
-    m_yz, c_yz = np.linalg.lstsq(A_yz, xyz.T[2], rcond=-1)[0]
+    # Calculate the mean of the points, i.e. the 'center' of the cloud
+    data_mean = xyz.mean(axis=0)
+    # Do an SVD on the mean-centered data.
+    uu, dd, vv = np.linalg.svd(xyz - data_mean)
+
+    line_pts = vv[0] * np.mgrid[-6:6:2j][:, np.newaxis]
+
+    # shift by the mean to get the line in the right place
+    line_pts += data_mean
+    dis = []
+    for i in range(0, len(xyz)):
+        dis.append(dist_seg(line_pts[0], line_pts[1], xyz[i]))
+    dis = np.asarray(dis)
+    print("rms error fit line: ", rms(dis))
 
     # plot line
     fig = plt.figure()
     ax = fig.add_subplot(111, projection='3d')
-    xx, yy = lin(xyz.T[2], c_xz, c_yz, m_xz, m_yz)
-    ax.scatter3D(xyz.T[0], xyz.T[1], xyz.T[2], color="blue", label="points")
-    ax.plot(xx, yy, xyz.T[2], color='blue', alpha=0.5)
+    ax.scatter3D(*xyz.T)
+    ax.plot3D(*line_pts.T)
     ax.set_xlabel('X (mm)')
     ax.set_ylabel('Y (mm)')
     ax.set_zlabel('Z (mm)')
-    ax.legend()
     plt.show()
     """
     ax = fig.add_subplot(312)
@@ -58,7 +65,6 @@ def plane_analysis(n_example):
     df = pd.read_csv("./circle{n}.csv".format(n=n_example))
     xyz = df.iloc[:, 1:4]
     xyz = np.asarray(xyz)
-
     # homogeneous coord
     hm = np.concatenate((xyz, np.ones((xyz.shape[0], 1))), axis=1)
 
@@ -86,14 +92,15 @@ def plane_analysis(n_example):
     # circle fit
     data_c = circle_fit.least_squares_circle(xyz_pca)
     r = data_c[2]  # radius from circle fit
-    r_ = np.sqrt((xyz_pca[:, 0])**2 + (xyz_pca[:, 1])**2)
-    print("rms error fit circle: ", rms(r-r_), "estimate radius in mm : ", r)
+    r_ = np.sqrt((xyz_pca[:, 0]) ** 2 + (xyz_pca[:, 1]) ** 2)
+    print("rms error fit circle: ", rms(r - r_), "estimate radius in mm : ", r)
 
     ax = fig.add_subplot(212)
     plt.scatter(xyz_pca[:, 0], xyz_pca[:, 1], color="black")
     plt.title('Proyección en el plano ajustado con centro en (0, 0, 0)')
     plt.axis('equal')
     plt.show()
+
 
 """
 def sphere_analysis(n_example):
