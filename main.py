@@ -37,6 +37,6 @@ def main(root):
     return pd.DataFrame(data={"x axis tip": x_cube, "y axis tip": y_cube, "z axis tip": z_cube})
 
 
-folder = './transl/'
+folder = './esf1/'
 df = main(folder)
-df.to_csv("transl.csv")
+df.to_csv("sph1.csv")
