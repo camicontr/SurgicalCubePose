@@ -6,23 +6,52 @@ import pandas as pd
 import circle_fit
 
 
+# the intersection of those two planes and
+# the function for the line would be:
+# z = m_yz * y + c_yz
+# z = m_xz * x + c_xz
+# or:
+def lin(z, c_xz_, c_yz_, m_xz_, m_yz_):
+    x = (z - c_xz_)/m_xz_
+    y = (z - c_yz_)/m_yz_
+    return x, y
+
+
 def transl_analysis():
     df = pd.read_csv("./transl.csv")
     xyz = df.iloc[:, 1:4]
     xyz = np.asarray(xyz)
+    # this will find the slope and x-intercept of a plane
+    # parallel to the y-axis that best fits the data
+    A_xz = np.vstack((xyz.T[0], np.ones(len(xyz.T[0])))).T
+    m_xz, c_xz = np.linalg.lstsq(A_xz, xyz.T[2], rcond=-1)[0]
+
+    # again for a plane parallel to the x-axis
+    A_yz = np.vstack((xyz.T[1], np.ones(len(xyz.T[1])))).T
+    m_yz, c_yz = np.linalg.lstsq(A_yz, xyz.T[2], rcond=-1)[0]
 
     # plot line
-    fig = plt.figure(figsize=(6, 12))
-    ax = fig.add_subplot(211, projection='3d')
-    ax.scatter3D(xyz.T[0], xyz.T[1], xyz.T[2], color="blue", label="points")
+    fig = plt.figure()
+    ax = fig.add_subplot(111, projection='3d')
+    zz = np.linspace(0, 0.5)
+    xx, yy = lin(zz, c_xz, c_yz, m_xz, m_yz)
+    # ax.scatter3D(xyz.T[0], xyz.T[1], xyz.T[2], color="blue", label="points")
+    ax.plot(xx, yy, zz)
     ax.set_xlabel('X (mm)')
     ax.set_ylabel('Y (mm)')
     ax.set_zlabel('Z (mm)')
     ax.legend()
-    ax = fig.add_subplot(212)
+    plt.show()
+    """
+    ax = fig.add_subplot(312)
+    plt.title("variación en z")
+    plt.scatter(xyz[:, 0], xyz[:, 2], color="blue")
+    plt.axis('equal')
+    ax = fig.add_subplot(313)
+    plt.title("variación en y")
     plt.scatter(xyz[:, 0], xyz[:, 1], color="blue")
     plt.axis('equal')
-    plt.show()
+    """
 
 
 def plane_analysis(n_example):
