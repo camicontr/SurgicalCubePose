@@ -33,10 +33,9 @@ def transl_analysis():
     # plot line
     fig = plt.figure()
     ax = fig.add_subplot(111, projection='3d')
-    zz = np.linspace(0, 0.5)
-    xx, yy = lin(zz, c_xz, c_yz, m_xz, m_yz)
-    # ax.scatter3D(xyz.T[0], xyz.T[1], xyz.T[2], color="blue", label="points")
-    ax.plot(xx, yy, zz)
+    xx, yy = lin(xyz.T[2], c_xz, c_yz, m_xz, m_yz)
+    ax.scatter3D(xyz.T[0], xyz.T[1], xyz.T[2], color="blue", label="points")
+    ax.plot(xx, yy, xyz.T[2], color='blue', alpha=0.5)
     ax.set_xlabel('X (mm)')
     ax.set_ylabel('Y (mm)')
     ax.set_zlabel('Z (mm)')
