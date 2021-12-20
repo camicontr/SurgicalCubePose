@@ -6,19 +6,6 @@ import pandas as pd
 import circle_fit
 
 
-def dist_seg(A, B, P):
-    if all(A==P) or all(B==P):
-        return 0
-
-    elif np.arccos(np.dot((P-A)/np.linalg.norm(P-A), (B-A)/np.linalg.norm(B-A))) > np.pi/2:
-        return np.linalg.norm(P-A)
-
-    elif np.arccos(np.dot((P-B)/np.linalg.norm(P-B), (A-B)/np.linalg.norm(A-B))) > np.pi/2:
-        return np.linalg.norm(P-B)
-
-    return np.linalg.norm(np.cross(B-A, A-P))/np.linalg.norm(B-A)
-
-
 def transl_analysis():
     df = pd.read_csv("./transl.csv")
     xyz = df.iloc[:, 1:4]
@@ -33,31 +20,29 @@ def transl_analysis():
 
     # shift by the mean to get the line in the right place
     line_pts += data_mean
+
+    # error calculation
     dis = []
     for i in range(0, len(xyz)):
         dis.append(dist_seg(line_pts[0], line_pts[1], xyz[i]))
     dis = np.asarray(dis)
-    print("rms error fit line: ", rms(dis))
+    print("mean error: ", mae(dis), "rms error fit line: ", rms(dis))
 
     # plot line
-    fig = plt.figure()
-    ax = fig.add_subplot(111, projection='3d')
+    fig = plt.figure(figsize=(6, 12))
+    ax = fig.add_subplot(211, projection='3d')
     ax.scatter3D(*xyz.T)
     ax.plot3D(*line_pts.T)
     ax.set_xlabel('X (mm)')
     ax.set_ylabel('Y (mm)')
     ax.set_zlabel('Z (mm)')
-    plt.show()
-    """
-    ax = fig.add_subplot(312)
+    ax = fig.add_subplot(212)
     plt.title("variación en z")
     plt.scatter(xyz[:, 0], xyz[:, 2], color="blue")
+    plt.xlabel("eje x (mm)")
+    plt.ylabel("eje z (mm)")
     plt.axis('equal')
-    ax = fig.add_subplot(313)
-    plt.title("variación en y")
-    plt.scatter(xyz[:, 0], xyz[:, 1], color="blue")
-    plt.axis('equal')
-    """
+    plt.show()
 
 
 def plane_analysis(n_example):
@@ -73,7 +58,7 @@ def plane_analysis(n_example):
 
     # calculate error:
     dists = get_point_dist(hm, p)
-    print(rms(dists), "rms error of plane fit")
+    print("mean error of plane fit", mae(dists), "rms error of plane fit", rms(dists))
 
     # plot plane
     fig = plt.figure(figsize=(6, 12))
@@ -93,7 +78,7 @@ def plane_analysis(n_example):
     data_c = circle_fit.least_squares_circle(xyz_pca)
     r = data_c[2]  # radius from circle fit
     r_ = np.sqrt((xyz_pca[:, 0]) ** 2 + (xyz_pca[:, 1]) ** 2)
-    print("rms error fit circle: ", rms(r - r_), "estimate radius in mm : ", r)
+    print("mean error: ", mae(r - r_), "rms error fit circle: ", rms(r - r_), "estimate radius in mm : ", r)
 
     ax = fig.add_subplot(212)
     plt.scatter(xyz_pca[:, 0], xyz_pca[:, 1], color="black")

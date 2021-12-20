@@ -137,6 +137,12 @@ def radius_sphere(points, center):
     return radius
 
 
+def dist_seg(a, b, p):
+    if all(a==p) or all(b==p):
+        return 0
+    return np.linalg.norm(np.cross(b-a, a-p))/np.linalg.norm(b-a)
+
+
 def rms(dist):
     # error rms
     return np.sqrt(np.mean(dist ** 2))
