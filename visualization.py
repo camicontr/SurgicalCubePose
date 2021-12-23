@@ -1,3 +1,5 @@
+from pyntcloud.ransac import single_fit, RansacSphere
+from pyntcloud import PyntCloud
 from sklearn.decomposition import PCA
 import matplotlib.pyplot as plt
 from utils import *
@@ -88,17 +90,19 @@ def plane_analysis(n_example):
 
 def sphere_analysis(n_example):
     # read data
-    df = pd.read_excel("/Users/pc/PycharmProjects/tg/sphere/sphere{n}.xlsx".
-                       format(n=n_example))
-    xyz = df.iloc[:, 1:4]
-    xyz = np.asarray(xyz)
+    df = pd.read_csv("./sph{n}.csv".format(n=n_example))
+    xyz_ = df.iloc[:, 1:4]
+    xyz_ = np.asarray(xyz_)
 
     # plot sphere
+    cloud = PyntCloud.from_file("sph1.csv")
     fig2 = plt.figure(2, figsize=(8, 8))
     ax = fig2.add_subplot(projection='3d')
-    ax.scatter3D(xyz.T[0], xyz.T[1], xyz.T[2], color="black", label="points")
+    ax.scatter3D(xyz_.T[0], xyz_.T[1], xyz_.T[2], color="black", label="points")
 
     # Create a sphere
+    inliers, model = single_fit(cloud.xyz, RansacSphere, return_model=True)
+    print(model.radius)
     """
     r = parameters[3]
     phi, theta = np.mgrid[0.0:np.pi:100j, 0.0:2.0*np.pi:100j]
@@ -115,3 +119,6 @@ def sphere_analysis(n_example):
     # r_calc = radius_sphere(xyz, parameters)
     # r_calc = np.asarray(r_calc)
     # print("El error rms es de {:.4f} mm".format(rms(r_calc - parameters[3])))
+
+
+sphere_analysis(1)
