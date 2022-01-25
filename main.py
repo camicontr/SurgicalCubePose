@@ -43,6 +43,11 @@ def main(root):
     return pd.DataFrame(data={"x axis tip": x_tip, "y axis tip": y_tip, "z axis tip": z_tip})
 
 
-folder = './esf1/'
-df = main(folder)
-# df.to_csv("sph1.csv")
+def run():
+    folder = './esf1/'
+    df = main(folder)
+    # df.to_csv("sph1.csv")
+
+
+if __name__ == "__main__":
+    run()
