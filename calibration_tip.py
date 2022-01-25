@@ -19,6 +19,7 @@ def method_koeda(p_table, p_cube, rot_cube):
     return p_rel, p_c_tip
 
 
+@error
 def method_lsq():
     # reading data for calibration
     data = pickle.load(open("data_for_calibration_tip_2.pickle", "rb"))
@@ -46,16 +47,14 @@ def method_lsq():
         # matrix rotation from quaternions
         ref_r_cube.extend(np.concatenate((r.as_matrix(), -np.identity(3)), axis=1))
     opt = scipy.linalg.lstsq(ref_r_cube, np.negative(ref_p_cube))
-    p_rel = opt[0][0:3]
+    # p_rel = opt[0][0:3]
+    # print("relative vector ts: ", p_rel)
 
     # Calculate error
     residual_vectors = np.array((ref_p_cube + ref_r_cube @ opt[0]).reshape(len(p_cube), 3))  # error
     residual_norms = np.linalg.norm(residual_vectors, axis=1)
 
-    mean_error = np.mean(residual_norms)
-    residual_rms = rms(residual_norms)
-    print("mean error: ", mean_error, "mm", "rms error: ", residual_rms, "mm", "data points: ", len(residual_norms))
-    print("relative vector ts: ", p_rel)
+    return residual_norms
 
 
 def preprocessing(root, m):
