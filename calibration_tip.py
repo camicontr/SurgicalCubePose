@@ -1,6 +1,7 @@
-from utils import *
+from classes import *
 import matplotlib.pyplot as plt
 import pandas as pd
+import numpy as np
 import pickle
 import scipy
 import os
