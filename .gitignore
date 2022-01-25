@@ -2,5 +2,6 @@
 *.csv
 *.pickle
 *.DS_Store
+*.md
 .idea/
 __pycache__/

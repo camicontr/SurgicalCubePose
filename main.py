@@ -1,17 +1,21 @@
+from auxiliar_functions import *
 from classes import *
 import pandas as pd
+import numpy as np
 import pickle
+import cv2
 import os
 cal = pickle.load(open("basler.pickle", "rb"))
 
 
+@execution_time
 def main(root):
     x_tip = []
     y_tip = []
     z_tip = []
 
-    detector = Aruco()
-    board = Pose(cal["mtx"], cal["dist"], 3, 19, [0, 4, 8, 16])  # in mm
+    detector = System()
+    cube = CubeAruco(cal["mtx"], cal["dist"], 3, 19, [0, 4, 8, 16])  # in mm
 
     images = np.array([root + f for f in os.listdir(root) if f.endswith(".PNG")])
     order = np.argsort([int(p.split(".")[-2].split("_")[-1]) for p in images])
@@ -22,12 +26,12 @@ def main(root):
         corners, ids = detector.detection(frame)
         detector.draw_detections(frame, corners, ids)
 
-        r_, r_cube, t_cube = board.pose_board(corners, ids, 2)
+        r_, r_cube, t_cube = cube.cube_pose(corners, ids, 2)
 
         if r_ > 3:
             p_tip = tip(r_cube, t_cube)
-            board.draw_axis(frame, r_cube, p_tip, 5)
-            board.draw_axis(frame, r_cube, t_cube, 10 )
+            cube.draw_axis(frame, r_cube, p_tip, 5)
+            cube.draw_axis(frame, r_cube, t_cube, 10 )
             x_tip.append(p_tip[0][0])
             y_tip.append(p_tip[1][0])
             z_tip.append(p_tip[2][0])
@@ -41,4 +45,4 @@ def main(root):
 
 folder = './esf1/'
 df = main(folder)
-df.to_csv("sph1.csv")
+# df.to_csv("sph1.csv")

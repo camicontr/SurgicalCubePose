@@ -1,5 +1,6 @@
-from classes import *
+from auxiliar_functions import *
 import matplotlib.pyplot as plt
+from classes import *
 import pandas as pd
 import numpy as np
 import pickle
@@ -14,7 +15,7 @@ def method_koeda(p_table, p_cube, rot_cube):
     r_cube = r_.as_matrix()  # convert to rotation matrix from Rodriguez vector .
     p_c_rel = np.subtract(p_table, p_cube)
     p_rel = np.matmul(np.linalg.inv(r_cube), p_c_rel)
-    p_c_tip = np.dot(r_cube, p_rel) + p_cube  # position of tip
+    p_c_tip = r_cube @ p_rel + p_cube  # position of tip
     return p_rel, p_c_tip
 
 
@@ -35,7 +36,7 @@ def method_lsq():
     ax.set_ylabel('Y (mm)')
     ax.set_zlabel('Z (mm)')
     plt.title("Aruco cube Positions")
-    plt.show()
+    # plt.show()
 
     ref_p_cube = np.array(p_cube.reshape(-1, 1))
     ref_r_cube = []
@@ -45,7 +46,6 @@ def method_lsq():
         # matrix rotation from quaternions
         ref_r_cube.extend(np.concatenate((r.as_matrix(), -np.identity(3)), axis=1))
     opt = scipy.linalg.lstsq(ref_r_cube, np.negative(ref_p_cube))
-
     p_rel = opt[0][0:3]
 
     # Calculate error
@@ -63,8 +63,8 @@ def preprocessing(root, m):
     # root: folder
 
     # initialization of the classes
-    detector_aruco = Aruco()
-    board = Pose(cal["mtx"], cal["dist"], 3, 19, [0, 4, 8, 16])  # in mm
+    detector_aruco = System()
+    board = CubeAruco(cal["mtx"], cal["dist"], 3, 19, [0, 4, 8, 16])  # in mm
 
     images = np.array([root + f for f in os.listdir(root) if f.endswith(".PNG")])
     order = np.argsort([int(p.split(".")[-2].split("_")[-1]) for p in images])
@@ -79,7 +79,7 @@ def preprocessing(root, m):
             detector_aruco.draw_detections(frame, corners, ids)  # draw marker detections
 
             if np.all(ids is not None):
-                r_, r_cube, t_cube = board.pose_board(corners, ids, 2)  # pose of cube
+                r_, r_cube, t_cube = board.cube_pose(corners, ids, 2)  # pose of cube
                 rotation = Rot.from_rotvec([r_cube[0][0], r_cube[1][0], r_cube[2][0]])
                 qua = rotation.as_quat()
 
@@ -106,11 +106,11 @@ def preprocessing(root, m):
         detector_aruco.draw_detections(frame, corners, ids)  # draw marker detections
 
         if np.all(ids is not None):  # If there are markers found by detector
-            ret, r_table, t_table = board.pose_board(corners, ids, 3)  # pose of table
+            ret, r_table, t_table = board.cube_pose(corners, ids, 3)  # pose of table
             if ret:
                 board.draw_axis(frame, r_table, t_table, 10)
 
-            ret1, r_cube, t_cube = board.pose_board(corners, ids, 2)  # pose of cube
+            ret1, r_cube, t_cube = board.cube_pose(corners, ids, 2)  # pose of cube
             if ret1:
                 board.draw_axis(frame, r_cube, t_cube, 10)
 
