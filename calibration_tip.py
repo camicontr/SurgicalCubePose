@@ -124,4 +124,9 @@ def preprocessing(root, m):
         cv2.destroyAllWindows()
 
 
-method_lsq()
+def run():
+    method_lsq()
+
+
+if __name__ == "__main__":
+    run()

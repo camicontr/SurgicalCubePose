@@ -8,7 +8,6 @@ import os
 cal = pickle.load(open("basler.pickle", "rb"))
 
 
-@execution_time
 def main(root):
     x_tip = []
     y_tip = []
@@ -25,13 +24,12 @@ def main(root):
         frame = cv2.imread(im)
         corners, ids = detector.detection(frame)
         detector.draw_detections(frame, corners, ids)
-
         r_, r_cube, t_cube = cube.cube_pose(corners, ids, 2)
 
         if r_ > 3:
             p_tip = tip(r_cube, t_cube)
             cube.draw_axis(frame, r_cube, p_tip, 5)
-            cube.draw_axis(frame, r_cube, t_cube, 10 )
+            cube.draw_axis(frame, r_cube, t_cube, 10)
             x_tip.append(p_tip[0][0])
             y_tip.append(p_tip[1][0])
             z_tip.append(p_tip[2][0])
@@ -44,9 +42,9 @@ def main(root):
 
 
 def run():
-    folder = './esf1/'
+    folder = './esf2/'
     df = main(folder)
-    # df.to_csv("sph1.csv")
+    df.to_csv("sph2.csv")
 
 
 if __name__ == "__main__":

@@ -13,6 +13,14 @@ def execution_time(func):
     return wrapper
 
 
+def error(func):
+    def wrapper(*args, **kwargs):
+        func(*args, **kwargs)
+        print(f'mae error: {np.mean(np.abs(func(*args, **kwargs)))} mm')
+        print(f'rms error: {np.sqrt(np.mean(func(*args, **kwargs) ** 2))} mm')
+    return wrapper
+
+
 def tip(r_vec, t_vec):
     p_k_rel = np.array([20.62984144,
                         -95.29293926,
@@ -29,6 +37,7 @@ def tip(r_vec, t_vec):
     return p_c_knife + R_c_knife @ p_k_rel
 
 
+# ------------------------------- Auxiliary functions for fit plane -------------------------------
 def svd(A):
     u, s, vh = np.linalg.svd(A)
     S = np.zeros(A.shape)
@@ -45,35 +54,45 @@ def fit_plane_lse(points):
     return null_space
 
 
-def get_point_dist(points, plane):
-    # return: 1d array of size N with the distance of the points respect the plane
-    dists = np.abs(points @ plane) / np.sqrt(plane[0] ** 2 + plane[1] ** 2 + plane[2] ** 2)
-    return dists
-
-
 def plot_plane(a, b, c, d):
     # plot plane with parameters [a, b, c, d]
     xx, yy = np.mgrid[-80:0, 20:100]
     return xx, yy, (-d - a * xx - b * yy) / c
 
 
-def radius_sphere(points, center):
-    # get the radius of sphere
-    radius = []
-    for point in points:
-        radius.append(np.sqrt((point[0]-center[0]) ** 2 + (point[1]-center[1]) ** 2 + (point[2]-center[2]) ** 2))
-    return radius
+def get_point_dist(points, plane):
+    # return: 1d array of size N with the distance of the points respect the plane
+    dists = np.abs(points @ plane) / np.sqrt(plane[0] ** 2 + plane[1] ** 2 + plane[2] ** 2)
+    return dists
+# -------------------------------------------------------------------------------------------------
 
 
+# ----------------------------- Auxiliary functions for fit sphere ---------------------------------
+def fit_sphere(xyz):
+    #   Assemble the A matrix
+    spX = xyz[:, 0]
+    spY = xyz[:, 1]
+    spZ = xyz[:, 2]
+    A = np.zeros((len(spX), 4))
+    A[:, 0] = spX*2
+    A[:, 1] = spY*2
+    A[:, 2] = spZ*2
+    A[:, 3] = 1
+
+    #   Assemble the f matrix
+    f = np.zeros((len(spX), 1))
+    f[:, 0] = (spX*spX) + (spY*spY) + (spZ*spZ)
+    C, residuals, rank, sing_val = np.linalg.lstsq(A, f, rcond=-1)
+
+    #   solve for the radius
+    t = (C[0]*C[0])+(C[1]*C[1])+(C[2]*C[2])+C[3]
+    radius = np.sqrt(t)
+
+    return radius, C[0], C[1], C[2]
+# -------------------------------------------------------------------------------------------------
+
+
+# ----------------------------- Auxiliary functions for fit line -----------------------------------
 def dist_points(a, b, p):
-    return np.linalg.norm(np.cross(b-a, a-p))/np.linalg.norm(b-a)
-
-
-def rms(dist):
-    # error rms
-    return np.sqrt(np.mean(dist ** 2))
-
-
-def mae(dist):
-    # error mae
-    return np.mean(np.abs(dist))
+    return np.linalg.norm(np.cross(b - a, a - p)) / np.linalg.norm(b - a)
+# -------------------------------------------------------------------------------------------------
