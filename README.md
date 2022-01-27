@@ -11,7 +11,6 @@ This is the main repository for tracking surgical attachment for accurate monocu
 * Sklearn
 * Pickle
 * circle_fit
-* Scikit-surgery-sphere-fitting
 
 ## Structure of the repository
 (`main.py`) is the principal program where from the images the pose of the tip of the instrument is estimated for each frame, (`calibration_tip.py`) is where the instrument tip is calibrated using two different methods, one of these least squares and some utility functions (`utils.py`). Finally in (`visualization.py`) the models of the experiments carried out are fitted.
