@@ -3,7 +3,7 @@ from auxiliar_functions import *
 import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
-# import circle_fit
+import circle_fit
 
 
 @execution_time
@@ -41,7 +41,7 @@ def transl_analysis():
     plt.xlabel("eje x (mm)")
     plt.ylabel("eje z (mm)")
     plt.axis('equal')
-    # plt.show()
+    plt.show()
 
     return dis
 
@@ -79,10 +79,10 @@ def plane_analysis(n_example):
     xyz_pca = pca.fit_transform(xyz)
 
     # circle fit
-    # data_c = circle_fit.least_squares_circle(xyz_pca)
-    # r = data_c[2]  # radius from circle fit
-    # r_ = np.sqrt((xyz_pca[:, 0]) ** 2 + (xyz_pca[:, 1]) ** 2)
-    # dis2 = r - r_
+    data_c = circle_fit.least_squares_circle(xyz_pca)
+    r = data_c[2]  # radius from circle fit
+    r_ = np.sqrt((xyz_pca[:, 0]) ** 2 + (xyz_pca[:, 1]) ** 2)
+    dis2 = r - r_
 
     # plot circle
     ax = fig.add_subplot(212)
@@ -91,7 +91,7 @@ def plane_analysis(n_example):
     plt.axis('equal')
     # plt.show()
 
-    return dis1
+    return dis2
 
 
 @execution_time
@@ -131,7 +131,7 @@ def sphere_analysis(n_example):
 
 
 def run():
-    sphere_analysis(1)
+    sphere_analysis(2)
 
 
 if __name__ == "__main__":
