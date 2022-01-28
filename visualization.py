@@ -41,7 +41,7 @@ def transl_analysis():
     plt.xlabel("eje x (mm)")
     plt.ylabel("eje z (mm)")
     plt.axis('equal')
-    plt.show()
+    # plt.show()
 
     return dis
 
@@ -131,7 +131,7 @@ def sphere_analysis(n_example):
 
 
 def run():
-    sphere_analysis(2)
+    plane_analysis(1)
 
 
 if __name__ == "__main__":

@@ -15,9 +15,9 @@ def execution_time(func):
 
 def error(func):
     def wrapper(*args, **kwargs):
-        func(*args, **kwargs)
-        print(f'mae error: {np.mean(np.abs(func(*args, **kwargs)))} mm')
-        print(f'rms error: {np.sqrt(np.mean(func(*args, **kwargs) ** 2))} mm')
+        f = func(*args, **kwargs)
+        print(f'rms error: {np.sqrt(np.mean(f ** 2))} mm')
+        print(f'mae error: {np.mean(np.abs(f))} mm')
     return wrapper
 
 
