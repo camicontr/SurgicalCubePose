@@ -96,9 +96,9 @@ def plane_analysis(n_example):
 
 @execution_time
 @error
-def sphere_analysis(n_example):
+def sphere_analysis(n_example: int):
     # read data
-    df = pd.read_csv("./sph{n}.csv".format(n=n_example))
+    df = pd.read_csv("./sphere/sph{n}.csv".format(n=n_example))
     xyz_ = df.iloc[:, 1:4]
     xyz_ = np.asarray(xyz_)
 
@@ -131,7 +131,7 @@ def sphere_analysis(n_example):
 
 
 def run():
-    plane_analysis(1)
+    sphere_analysis(1)
 
 
 if __name__ == "__main__":
