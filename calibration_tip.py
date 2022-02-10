@@ -9,7 +9,7 @@ import os
 cal = pickle.load(open("basler.pickle", "rb"))  # parameters intrinsic of camera
 
 
-def method_koeda(p_table, p_cube, rot_cube):
+def koeda_method(p_table, p_cube, rot_cube):
     # calibration tip with koeda method.
     r_ = Rot.from_rotvec([rot_cube[0][0], rot_cube[1][0], rot_cube[2][0]])
     r_cube = r_.as_matrix()  # convert to rotation matrix from Rodriguez vector .
@@ -20,7 +20,7 @@ def method_koeda(p_table, p_cube, rot_cube):
 
 
 @error
-def method_lsq():
+def lsq_method():
     # reading data for calibration
     data = pickle.load(open("data_for_calibration_tip_2.pickle", "rb"))
     qw = data[:, 0]
@@ -114,7 +114,7 @@ def preprocessing(root, m):
                 board.draw_axis(frame, r_cube, t_cube, 10)
 
             if ret > 3 and ret1 > 3:
-                relative, p_tip = method_koeda(t_table, t_cube, r_cube)
+                relative, p_tip = koeda_method(t_table, t_cube, r_cube)
                 pickle.dump(relative, open("relative_vector.pickle", "wb"))  # save the relative vector for koeda method
 
             #  Display the resulting frame
@@ -124,7 +124,7 @@ def preprocessing(root, m):
 
 
 def run():
-    method_lsq()
+    lsq_method()
 
 
 if __name__ == "__main__":
