@@ -6,7 +6,7 @@ import numpy as np
 import pickle
 import scipy
 import os
-cal = pickle.load(open("basler.pickle", "rb"))  # parameters intrinsic of camera
+cal = pickle.load(open("basler.pickle", "rb"))  # intrinsic parameters of camera
 
 
 def koeda_method(p_table, p_cube, rot_cube):

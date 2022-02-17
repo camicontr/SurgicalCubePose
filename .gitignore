@@ -5,3 +5,4 @@
 *.md
 .idea/
 __pycache__/
+./images

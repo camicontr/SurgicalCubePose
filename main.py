@@ -34,17 +34,17 @@ def main(root):
             y_tip.append(p_tip[1][0])
             z_tip.append(p_tip[2][0])
 
-        # cv2.imshow("output", frame)
-        # cv2.waitKey(0)
+        cv2.imshow("output", frame)
+        cv2.waitKey(0)
 
     cv2.destroyAllWindows()
     return pd.DataFrame(data={"x axis tip": x_tip, "y axis tip": y_tip, "z axis tip": z_tip})
 
 
 def run():
-    folder = './esf2/'
+    folder = './images/'
     df = main(folder)
-    df.to_csv("sph2.csv")
+    df.to_csv("test.csv")
 
 
 if __name__ == "__main__":
