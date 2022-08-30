@@ -3,5 +3,13 @@
 *.pickle
 *.DS_Store
 *.md
-.idea/
 __pycache__/
+refine_tip_1/
+refine_tip_2/
+circle1/
+circle2/
+circle3/
+sphere/
+transl/
+esf1/
+esf2/
