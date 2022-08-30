@@ -21,15 +21,18 @@ def error(func):
     return wrapper
 
 
+# ------------------------------- Auxiliary function for tip transform -------------------------------
 def tip(r_vec, t_vec):
-    p_k_rel = np.array([20.62984144,
-                        -95.29293926,
-                        -27.32301939])
+    p_k_rel = np.array([20.42962901,
+                        139.03692834,
+                        22.34037493]
+                        )
     p_k_rel = p_k_rel.reshape((3, 1))
 
     p_c_knife = np.array([t_vec[0][0],
                           t_vec[1][0],
-                          t_vec[2][0]])
+                          t_vec[2][0]]
+                        )
     p_c_knife = p_c_knife.reshape((3, 1))
 
     r = Rot.from_rotvec([r_vec[0][0], r_vec[1][0], r_vec[2][0]])
@@ -64,7 +67,6 @@ def get_point_dist(points, plane):
     # return: 1d array of size N with the distance of the points respect the plane
     dists = np.abs(points @ plane) / np.sqrt(plane[0] ** 2 + plane[1] ** 2 + plane[2] ** 2)
     return dists
-# -------------------------------------------------------------------------------------------------
 
 
 # ----------------------------- Auxiliary functions for fit sphere ---------------------------------
@@ -89,10 +91,8 @@ def fit_sphere(xyz):
     radius = np.sqrt(t)
 
     return radius, C[0], C[1], C[2]
-# -------------------------------------------------------------------------------------------------
 
 
 # ----------------------------- Auxiliary functions for fit line -----------------------------------
 def dist_points(a, b, p):
     return np.linalg.norm(np.cross(b - a, a - p)) / np.linalg.norm(b - a)
-# -------------------------------------------------------------------------------------------------

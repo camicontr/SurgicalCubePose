@@ -2,7 +2,6 @@ from sklearn.decomposition import PCA
 from auxiliar_functions import *
 import matplotlib.pyplot as plt
 import pandas as pd
-import numpy as np
 import circle_fit
 
 
@@ -122,8 +121,12 @@ def sphere_analysis(n_example: int):
     ax.set_title('fit sphere example: sphere{}'.format(n_example))
     # plt.show()
 
-    radius_cal = list(map(lambda point: np.sqrt((point[0] - parameters[1]) ** 2 + (point[1] - parameters[2]) ** 2 +
-                                                (point[2] - parameters[3]) ** 2), xyz_))
+    radius_cal = list(map(lambda point: np.sqrt(
+        (point[0] - parameters[1]) ** 2 +\
+        (point[1] - parameters[2]) ** 2 +\
+        (point[2] - parameters[3]) ** 2
+        ), xyz_))
+
     r_calc = np.asarray(radius_cal)
     dis = r_calc - r
 

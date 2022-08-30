@@ -2,8 +2,8 @@ circle-fit
 matplotlib
 numpy
 pandas
+opencv-contrib-python
 opencv-python
 scikit-learn
 scipy
-pickle
 pickle-mixin==1.0.2
