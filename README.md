@@ -19,7 +19,7 @@ To run this example:
 pip install virtualenv
 ```
 ```bash
-python -m venv envv
+python -m venv env
 ```
 * Activate env
 ```bash
