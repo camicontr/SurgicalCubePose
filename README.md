@@ -16,7 +16,7 @@ This is the main repository for tracking surgical attachment for accurate monocu
 (`main.py`) is the principal program where from the images the pose of the tip of the instrument is estimated for each frame, (`calibration_tip.py`) is where the instrument tip is calibrated using two different methods, one of these least squares and some utility functions (`auxiliar_functions.py`). Finally in (`visualization.py`) the models of the experiments carried out are fitted.
 
 ## Usage example
-With this example, from tracing the tip of the surgical instrument on top of a porcelain sphere with a radius of 7.5 mm hidden in a fluffy body, the following sphere model is obtained, shown in the gif.
+From the tracking of the tip of the surgical instrument on a porcelain sphere of 7.5 mm radius hidden in a corpus spongiosum, a sphere fit model with a radius rms error of 0.1701 mm is obtained, shown in the gif.
 
 <p align="center">
     <img src="figures/tracing.gif" alt="tracing the sphere" width="300px"/>
@@ -33,4 +33,3 @@ A visualization of the point cloud in addition to the sphere model obtained
 <p align="center">
     <img src="figures/Sphere.jpeg" alt="Result of fit sphere" width="500px"/>
 </p>
-With a radius rms error of 0.1701 mm 
