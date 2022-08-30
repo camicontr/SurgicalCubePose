@@ -44,7 +44,6 @@ def main(root):
 def run():
     folder = './transl/'
     df = main(folder)
-    # df.to_csv("sph2.csv")
 
 
 if __name__ == "__main__":
